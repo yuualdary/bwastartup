@@ -11,6 +11,7 @@ import (
 
 type Repository interface {
 	Save(user models.Users) (models.Users, error)
+	FindByEmail(email string) (models.Users, error)
 }
 
 type repository struct {
@@ -29,3 +30,18 @@ func (r *repository) Save(user models.Users) (models.Users, error){
 		}
 		return user, nil
 }
+
+func (r *repository) FindByEmail(email string) (models.Users, error) {
+
+	var user models.Users
+
+	err:= r.db.Where("email = ? ", email).Find(&user).Error
+	
+	if err != nil {
+		return user, nil
+	}
+
+	return user, nil
+
+}
+

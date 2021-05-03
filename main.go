@@ -31,6 +31,7 @@ func main(){
 	// fmt.Println(user)
 	// userRepository.Save(user)
 	userHandler := handler.NewUserHandler(userService)
+	userService.SaveAvatar(2,"images/1-profile.png")
 	// login, err := userRepository.FindByEmail("email@domain.com")
 
 	// if err != nil {
@@ -62,6 +63,8 @@ func main(){
 		v1.POST("/user/create", userHandler.RegisterUser)
 		v1.POST("/user/login", userHandler.LoginUser)
 		v1.POST("/user/checkmail", userHandler.CheckEmailIsExist)
+		v1.POST("/user/avatar", userHandler.UploadAvatar)
+
 
 		
 

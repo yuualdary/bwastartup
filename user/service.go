@@ -13,6 +13,7 @@ type Service interface {
 	RegisterUser(input RegisterUserInput) (models.Users, error)
 	LoginUser(input LoginUserInput) (models.Users, error)
 	CheckMailUser(input CheckMailInput) (bool, error)
+	SaveAvatar(ID int, filelocation string) (models.Users, error) 
 
 
 }
@@ -92,6 +93,30 @@ func (s *service) CheckMailUser(input CheckMailInput) (bool, error){
 	return false, nil
 
 }
+
+func (s *service) SaveAvatar(ID int, filelocation string) (models.Users, error){
+
+	//get user by id
+	//update avatar file name
+	//save perubahan avatar file name
+	user, err := s.repository.FindById(ID)
+
+	if err !=nil{
+		return user, err
+	}
+
+	user.Avatar_file_name = filelocation
+
+	Update, err := s.repository.UpdateUser(user)
+
+	if err != nil{
+		return Update, err
+	}
+
+	return Update, nil
+}
+
+
 
 
 

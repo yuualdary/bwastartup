@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bwastartup/auth"
 	"bwastartup/config"
 	"bwastartup/controllers"
 	"bwastartup/handler"
 	"bwastartup/user"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,6 +18,9 @@ func main(){
 
 	userRepository := user.NewRepository(config.DB)
 	userService := user.NewService(userRepository)
+	AuthService := auth.NewService()
+
+	fmt.Println(AuthService.GenerateToken(1001))
 	// userInput := user.RegisterUserInput{}
 
 	// userInput.Name = "Test Simpan"
@@ -30,7 +35,7 @@ func main(){
 	// }
 	// fmt.Println(user)
 	// userRepository.Save(user)
-	userHandler := handler.NewUserHandler(userService)
+	userHandler := handler.NewUserHandler(userService, AuthService)
 	userService.SaveAvatar(2,"images/1-profile.png")
 	// login, err := userRepository.FindByEmail("email@domain.com")
 
@@ -64,6 +69,7 @@ func main(){
 		v1.POST("/user/login", userHandler.LoginUser)
 		v1.POST("/user/checkmail", userHandler.CheckEmailIsExist)
 		v1.POST("/user/avatar", userHandler.UploadAvatar)
+		
 
 
 		

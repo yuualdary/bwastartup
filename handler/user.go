@@ -200,6 +200,7 @@ func (h *userHandler) UploadAvatar(c *gin.Context){
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
+	//anggap dapat dari jwt
 
 	userID := 24
 
@@ -217,7 +218,6 @@ func (h *userHandler) UploadAvatar(c *gin.Context){
 		return
 	}
 
-	//anggap dapat dari jwt
 	// get user id dan path untuk disimpan kedalam databaase
 
 	_, err = h.userService.SaveAvatar(userID,path)

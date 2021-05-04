@@ -36,22 +36,22 @@ func main(){
 	// fmt.Println(user)
 	// userRepository.Save(user)
 	userHandler := handler.NewUserHandler(userService, AuthService)
-	token, err := AuthService.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNH0.eMpAU2bDKAbVLcnBxr3CEjf2gNr-aNsJSHMAWJr9QOo")
-	if err != nil{
-		fmt.Println("ERROR")
-		fmt.Println("ERROR")
-		fmt.Println("ERROR")
-	}
+	// token, err := AuthService.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNH0.eMpAU2bDKAbVLcnBxr3CEjf2gNr-aNsJSHMAWJr9QOo")
+	// if err != nil{
+	// 	fmt.Println("ERROR")
+	// 	fmt.Println("ERROR")
+	// 	fmt.Println("ERROR")
+	// }
 
-	if token.Valid{
-		fmt.Println("VALID")
-		fmt.Println("VALID")
-		fmt.Println("VALID")
-	}else{
-		fmt.Println("INVALID")
-		fmt.Println("INVALID")
-		fmt.Println("INVALID")
-	}
+	// if token.Valid{
+	// 	fmt.Println("VALID")
+	// 	fmt.Println("VALID")
+	// 	fmt.Println("VALID")
+	// }else{
+	// 	fmt.Println("INVALID")
+	// 	fmt.Println("INVALID")
+	// 	fmt.Println("INVALID")
+	// }
 	userService.SaveAvatar(2,"images/1-profile.png")
 	// login, err := userRepository.FindByEmail("email@domain.com")
 

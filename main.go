@@ -5,6 +5,7 @@ import (
 	"bwastartup/config"
 	"bwastartup/controllers"
 	"bwastartup/handler"
+	"bwastartup/middleware"
 	"bwastartup/user"
 	"fmt"
 
@@ -84,7 +85,7 @@ func main(){
 		v1.POST("/user/create", userHandler.RegisterUser)
 		v1.POST("/user/login", userHandler.LoginUser)
 		v1.POST("/user/checkmail", userHandler.CheckEmailIsExist)
-		v1.POST("/user/avatar", userHandler.UploadAvatar)
+		v1.POST("/user/avatar",middleware.AuthMiddleware(AuthService, userService) ,userHandler.UploadAvatar)
 
 
 

@@ -3,6 +3,7 @@ package handler
 import (
 	"bwastartup/auth"
 	"bwastartup/helper"
+	"bwastartup/models"
 	"bwastartup/user"
 	"fmt"
 	"net/http"
@@ -201,8 +202,8 @@ func (h *userHandler) UploadAvatar(c *gin.Context){
 		return
 	}
 	//anggap dapat dari jwt
-
-	userID := 24
+	CurrentUser :=c.MustGet("CurrentUser").(models.Users)
+	userID := int(CurrentUser.ID)
 
 	path := fmt.Sprintf("images/%d-%s",userID,file.Filename)
 	//save to patg
@@ -223,14 +224,20 @@ func (h *userHandler) UploadAvatar(c *gin.Context){
 	_, err = h.userService.SaveAvatar(userID,path)
 
 	if err != nil{
-		
-		data := gin.H{"is_uploaded" : true}
+		data := gin.H{"is_uploaded" : false}
 
-		response := helper.APIResponse("Success to upload an image", http.StatusOK,"error", data)
+		response := helper.APIResponse("Failed to upload an image", http.StatusBadRequest,"error", data)
 
-		c.JSON(http.StatusOK, response)
+		c.JSON(http.StatusBadRequest, response)
 		return
+	
 	}
+	data := gin.H{"is_uploaded" : true}
+
+	response := helper.APIResponse("Success to upload an image", http.StatusOK,"error", data)
+
+	c.JSON(http.StatusOK, response)
+	
 
 
 }

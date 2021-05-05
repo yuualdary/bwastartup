@@ -14,6 +14,7 @@ type Service interface {
 	LoginUser(input LoginUserInput) (models.Users, error)
 	CheckMailUser(input CheckMailInput) (bool, error)
 	SaveAvatar(ID int, filelocation string) (models.Users, error) 
+	GetUserById(ID int) (models.Users, error)
 
 
 }
@@ -114,6 +115,21 @@ func (s *service) SaveAvatar(ID int, filelocation string) (models.Users, error){
 	}
 
 	return Update, nil
+}
+
+
+func (s *service)GetUserById(ID int) (models.Users, error){
+
+	user, err := s.repository.FindById(ID)
+
+	if err != nil{
+		return user, err
+	}
+
+	if user.ID == 0{
+		return user, errors.New("No user found")
+	}
+	return user, nil
 }
 
 

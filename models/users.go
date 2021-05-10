@@ -11,8 +11,8 @@ type Users struct {
 	Avatar_file_name string
 	Role             string
 	Token            string
-	Campaigns []Campaigns `gorm:"many2many:user_tasks;"`
-	Transactions []Transactions `gorm:"many2many:user_tasks;"`
+	Campaigns []Campaigns 
+	Transactions []Transactions 
 
 }
 

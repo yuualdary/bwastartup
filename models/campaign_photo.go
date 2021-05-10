@@ -9,3 +9,4 @@ type Campaign_photo struct {
 	Is_primary bool
 
 }
+

@@ -4,6 +4,7 @@ import "bwastartup/models"
 
 type Service interface {
 	GetCampaign(UserID int) ([]models.Campaigns, error)
+	GetCampaignByID(input GetCampaignDetailInput) (models.Campaigns, error)
 
 }
 
@@ -34,5 +35,17 @@ func (s *service) GetCampaign(UserID int) ([]models.Campaigns, error){//karena m
 		}
 
 	return GetAllCampaign, nil
+}
+
+func (s *service) GetCampaignByID(input GetCampaignDetailInput) (models.Campaigns, error){
+
+	GetCampaign, err:= s.repository.FindDetailCampaign(input.ID)
+
+	if err != nil{
+		return GetCampaign, err
+	}
+
+	return GetCampaign, nil
+
 }
 

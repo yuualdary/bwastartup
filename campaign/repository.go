@@ -11,6 +11,7 @@ import (
 type Repository interface {
 	FindAll() ([]models.Campaigns, error)
 	FindByID(UserID int) ([]models.Campaigns, error)
+	FindDetailCampaign(CampaignID int) (models.Campaigns, error)
 }
 
 
@@ -47,4 +48,20 @@ func (r *repository)  FindByID(UserID int) ([]models.Campaigns, error){
 
 	return campaigns, nil
 }
+
+
+func (r *repository) FindDetailCampaign(CampaignID int) (models.Campaigns, error){
+
+	var DetailCampaign models.Campaigns
+
+	err := r.db.Preload("User").Preload("Campaign_photos").Where("id = ?", CampaignID).Find(&DetailCampaign).Error
+
+	if err !=nil {
+		return DetailCampaign, err
+	}
+
+	return DetailCampaign, nil
+}
+
+
 

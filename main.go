@@ -4,7 +4,6 @@ import (
 	"bwastartup/auth"
 	"bwastartup/campaign"
 	"bwastartup/config"
-	"bwastartup/controllers"
 	"bwastartup/handler"
 	"bwastartup/middleware"
 	"bwastartup/user"
@@ -105,18 +104,20 @@ func main(){
 	router.Static("/images","./images")//namafolder, nama file db
 	v1 := router.Group("/api/v1")
 	{
-		v1.GET("/user/all", controllers.GetAllUser)
 		v1.POST("/user/create", userHandler.RegisterUser)
 		v1.POST("/user/login", userHandler.LoginUser)
 		v1.POST("/user/checkmail", userHandler.CheckEmailIsExist)
 		v1.POST("/user/avatar",middleware.AuthMiddleware(AuthService, userService) ,userHandler.UploadAvatar)
+
+
 		v1.GET("/campaigns/all",CampaignHandler.GetCampaign)
+		v1.GET("/campaigns/all/:id",CampaignHandler.GetDetailCampaign)
 
 
 
 		
 
 	}
-	router.Run()
+	router.Run(":8000")
 
 }

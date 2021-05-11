@@ -241,3 +241,5 @@ func (h *userHandler) UploadAvatar(c *gin.Context){
 
 
 }
+
+

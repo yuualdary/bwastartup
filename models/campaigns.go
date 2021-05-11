@@ -17,7 +17,7 @@ type Campaigns struct {
 	Backer_count int 
 	Slug string
 	Transactions []Transactions //`gorm:"many2many:campaign_transaction;"`
-
+	User Users `gorm:"foreignKey:UsersID"`
 
 }
 

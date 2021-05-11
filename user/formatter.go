@@ -12,12 +12,11 @@ type UserFormatter struct {
 
 func FormatUser(user models.Users, token string) UserFormatter {
 	formatter := UserFormatter{
-		ID: int(user.ID),
-		Name : user.Name,
+		ID:         int(user.ID),
+		Name:       user.Name,
 		Occupation: user.Occupation,
-		Email : user.Email,
-		Token:  token,
-
+		Email:      user.Email,
+		Token:      token,
 	}
 	return formatter
 }

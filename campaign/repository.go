@@ -12,6 +12,8 @@ type Repository interface {
 	FindAll() ([]models.Campaigns, error)
 	FindByID(UserID int) ([]models.Campaigns, error)
 	FindDetailCampaign(CampaignID int) (models.Campaigns, error)
+	Save(campaign models.Campaigns) (models.Campaigns, error)
+	UpdateCampaign(campaign models.Campaigns) (models.Campaigns, error)
 }
 
 
@@ -61,6 +63,28 @@ func (r *repository) FindDetailCampaign(CampaignID int) (models.Campaigns, error
 	}
 
 	return DetailCampaign, nil
+}
+
+func (r *repository) Save(campaign models.Campaigns) (models.Campaigns, error){
+	
+	//create hanya untuk data baru!
+	err := r.db.Create(&campaign).Error
+
+	if err != nil {
+		return campaign,err
+	}
+
+	return campaign, nil
+}
+
+func (r *repository) UpdateCampaign(campaign models.Campaigns) (models.Campaigns, error){
+	err := r.db.Save(&campaign).Error
+
+	if err != nil{
+		return campaign,err 
+	}
+
+	return campaign, nil
 }
 
 

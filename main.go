@@ -114,7 +114,7 @@ func main(){
 		v1.GET("/campaigns/all/:id",CampaignHandler.GetDetailCampaign)
 		v1.POST("/campaigns/create",middleware.AuthMiddleware(AuthService, userService),CampaignHandler.CreateCampaign)// kenapa pakai middleware, agar yang mau membuat campaign sudah login dan kita bisa mendapatkan ID nya dia(yang buat campaign)
 		v1.PUT("/campaigns/update/:id",middleware.AuthMiddleware(AuthService, userService),CampaignHandler.UpdateCampaign)// kenapa pakai middleware, agar yang mau membuat campaign sudah login dan kita bisa mendapatkan ID nya dia(yang buat campaign)
-
+		v1.POST("/campaigns-images/upload",middleware.AuthMiddleware(AuthService, userService),CampaignHandler.UploadCampaignPhoto)// kenapa pakai middleware, agar yang mau membuat campaign sudah login dan kita bisa mendapatkan ID nya dia(yang buat campaign)
 
 
 

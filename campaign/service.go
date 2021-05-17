@@ -14,8 +14,8 @@ type Service interface {
 	GetCampaign(UserID int) ([]models.Campaigns, error)
 	GetCampaignByID(input GetCampaignDetailInput) (models.Campaigns, error)
 	CreateCampaign(input CreateCampaignInput) (models.Campaigns, error)
-	UpadateCampaign(CampaignID GetCampaignDetailInput, DetailCampaign CreateCampaignInput) (models.Campaigns, error)
-
+	UpdateCampaign(CampaignID GetCampaignDetailInput, DetailCampaign CreateCampaignInput) (models.Campaigns, error)
+	CreateCampaignPhoto(InputPhoto CreateCampaignPhotoInput, FileLocation string)(models.Campaign_photo, error)
 }
 
 type service struct{
@@ -82,7 +82,7 @@ func (s *service) CreateCampaign(input CreateCampaignInput) (models.Campaigns, e
 	return NewCampaign, nil
 }
 
-func (s *service) UpadateCampaign(CampaignID GetCampaignDetailInput, DetailCampaign CreateCampaignInput) (models.Campaigns, error){
+func (s *service) UpdateCampaign(CampaignID GetCampaignDetailInput, DetailCampaign CreateCampaignInput) (models.Campaigns, error){
 
 	GetCampaign, err:= s.repository.FindDetailCampaign(CampaignID.ID)
 
@@ -111,5 +111,43 @@ func (s *service) UpadateCampaign(CampaignID GetCampaignDetailInput, DetailCampa
 
 
 
+}
+func (s *service)CreateCampaignPhoto(InputPhoto CreateCampaignPhotoInput, FileLocation string)(models.Campaign_photo, error){
+
+	CheckCampaignID, err := s.repository.FindDetailCampaign(InputPhoto.CampaignID)//ambil data campaign 
+	
+	if err != nil{
+		return models.Campaign_photo{},err
+	}
+
+	if CheckCampaignID.UsersID !=  int(InputPhoto.User.ID){
+
+		return models.Campaign_photo{},  errors.New("You Are Not The Owner")
+
+	}
+	isPrimary := false
+
+
+	if InputPhoto.IsPrimary{// InputPhoto.Isprimary == True, tapi ini disingkat
+		isPrimary = true 
+		//deafultnya itu false (ngubah is primary yang true ke false)
+		_, err:= s.repository.SetAllCampaignPhotoDefault(InputPhoto.CampaignID)
+		if err != nil{
+			return models.Campaign_photo{}, err
+		}
+
+	}
+
+	CampaignImage := models.Campaign_photo{}
+	CampaignImage.CampaignsID = InputPhoto.CampaignID
+	CampaignImage.Is_primary = isPrimary
+	CampaignImage.File_name = FileLocation
+	
+	SaveCampaignPhoto,err := s.repository.UploadImage(CampaignImage)
+
+	if err != nil{
+		return SaveCampaignPhoto, err
+	}
+	return SaveCampaignPhoto,nil
 }
 

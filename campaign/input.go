@@ -12,3 +12,9 @@ type CreateCampaignInput struct {
 	Perks       string `json:"perks" binding:"required"`
 	User        models.Users
 }
+
+type CreateCampaignPhotoInput struct{
+	CampaignID int `form:"campaign_id" binding:"required"`
+	IsPrimary bool `form:"is_primary" `//binding:"required" dihilangin, karena defaultny sudah false, kalau dipasang harus true
+	User        models.Users
+}

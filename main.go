@@ -6,6 +6,7 @@ import (
 	"bwastartup/config"
 	"bwastartup/handler"
 	"bwastartup/middleware"
+	"bwastartup/transaction"
 	"bwastartup/user"
 	"fmt"
 
@@ -24,6 +25,9 @@ func main(){
 	CampaignRepository := campaign.NewRepository(config.DB)
 	CampaignService := campaign.NewService(CampaignRepository)
 
+	TransactionRepository := transaction.NewRepository(config.DB)
+	TransactionService := transaction.NewService(TransactionRepository,CampaignRepository)
+
 	fmt.Println(AuthService.GenerateToken(1001))
 	// userInput := user.RegisterUserInput{}
 
@@ -41,6 +45,7 @@ func main(){
 	// userRepository.Save(user)
 	userHandler := handler.NewUserHandler(userService, AuthService)
 	CampaignHandler := handler.NewCampaignHandler(CampaignService)
+	TransactionHandler := handler.NewTransactionHandler(TransactionService)
 
 	// campaigns, err := campaign.NewRepository(config.DB).FindByID(3)
  
@@ -117,7 +122,7 @@ func main(){
 		v1.POST("/campaigns-images/upload",middleware.AuthMiddleware(AuthService, userService),CampaignHandler.UploadCampaignPhoto)// kenapa pakai middleware, agar yang mau membuat campaign sudah login dan kita bisa mendapatkan ID nya dia(yang buat campaign)
 
 
-
+		v1.GET("/campaigns/:id/transactions", middleware.AuthMiddleware(AuthService, userService), TransactionHandler.GetTransaction)
 		
 
 	}

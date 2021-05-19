@@ -9,4 +9,6 @@ type Transactions struct {
 	Amount      int
 	Status      string
 	Code        string
+	User Users `gorm:"foreignKey:UsersID"`
+
 }

@@ -58,7 +58,7 @@ func (r *repository) FindDetailCampaign(CampaignID int) (models.Campaigns, error
 
 	var DetailCampaign models.Campaigns
 
-	err := r.db.Preload("User").Preload("Campaign_photos").Where("id = ?", CampaignID).Find(&DetailCampaign).Error
+	err := r.db.Preload("Campaign_photos").Where("id = ?", CampaignID).Find(&DetailCampaign).Error
 
 	if err !=nil {
 		return DetailCampaign, err

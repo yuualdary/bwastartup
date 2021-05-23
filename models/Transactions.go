@@ -1,6 +1,11 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
+
 
 type Transactions struct {
 	gorm.Model
@@ -10,5 +15,8 @@ type Transactions struct {
 	Status      string
 	Code        string
 	User Users `gorm:"foreignKey:UsersID"`
+	Campaign Campaigns `gorm:"foreignKey:CampaignsID"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
 
 }

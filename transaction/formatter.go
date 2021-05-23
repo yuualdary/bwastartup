@@ -37,3 +37,58 @@ func FormatTransactions(ListTransaction []models.Transactions) []TransactionForm
 
 	return ListTransactionFormatter
 }
+type UserTransactionFormatter struct{
+	ID        int    `json:"id"`
+	Name      string `json:"name"`
+	Amount    int    `json:"amount"`
+	CreatedAt time.Time `json:"created_at"`
+	Campaign CampaignUserFormatter `json:"campaign"`
+
+}
+type CampaignUserFormatter struct{
+
+	Name string `json:"name"`
+	ImageUrl string `json:"image_url"`
+}
+
+func FormatUserTransaction(transaction models.Transactions) UserTransactionFormatter{
+
+	formatter := UserTransactionFormatter{}
+	formatter.ID = int(transaction.ID)
+	formatter.Name = transaction.User.Name
+	formatter.Amount = transaction.Amount
+	formatter.CreatedAt = transaction.CreatedAt
+	
+
+	CampaignFormatter := CampaignUserFormatter{}
+	CampaignFormatter.Name =  transaction.Campaign.Name
+	CampaignFormatter.ImageUrl = ""
+
+	if len(transaction.Campaign.Campaign_photos) > 0 {
+		CampaignFormatter.ImageUrl = transaction.Campaign.Campaign_photos[0].File_name
+	}
+	
+	formatter.Campaign = CampaignFormatter
+
+	return formatter
+
+}
+
+func ListFormatUserTransactions(transactions []models.Transactions) []UserTransactionFormatter{
+
+	if len(transactions) == 0 {
+		return []UserTransactionFormatter{}
+	}
+
+	var ListTransactionFormatter []UserTransactionFormatter//single object
+
+	for _, GetTransaction := range transactions{
+
+		formatter := FormatUserTransaction(GetTransaction)//get user transaction formatter
+		ListTransactionFormatter = append(ListTransactionFormatter, formatter)//di append ke list []
+
+
+	}
+	return ListTransactionFormatter
+
+}

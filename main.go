@@ -123,7 +123,7 @@ func main(){
 
 
 		v1.GET("/campaigns/:id/transactions", middleware.AuthMiddleware(AuthService, userService), TransactionHandler.GetTransaction)
-		
+		v1.GET("/transactions/users", middleware.AuthMiddleware(AuthService, userService), TransactionHandler.GetUserTransaction)
 
 	}
 	router.Run(":8000")

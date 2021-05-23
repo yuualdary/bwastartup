@@ -43,3 +43,24 @@ func(h *TransactionHandler) GetTransaction(c *gin.Context){
 	response := helper.APIResponse("List Of Transaction Data", http.StatusBadRequest, "success",transaction.FormatTransactions(GetTransaction))
 	c.JSON(http.StatusBadRequest, response)
 }
+
+func (h *TransactionHandler) GetUserTransaction(c *gin.Context){
+	
+	CurrentUser :=c.MustGet("CurrentUser").(models.Users)//get current user
+	UserID := CurrentUser.ID
+
+	transactions, err := h.TransactionService.GetTransactionByUserID(int(UserID))
+
+	if err !=nil{
+		response := helper.APIResponse("Fail Get User Transaction Data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("List Of User Transactions", http.StatusBadRequest, "success",transaction.ListFormatUserTransactions(transactions))
+	c.JSON(http.StatusBadRequest, response)
+
+
+
+	
+}

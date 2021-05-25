@@ -1,8 +1,10 @@
 package transaction
 
 import (
+	"bwastartup/GeneratorNumber"
 	"bwastartup/campaign"
 	"bwastartup/models"
+
 	"errors"
 )
 
@@ -10,11 +12,13 @@ import (
 type Service interface {
 	GetTransactionByCampaignID(CampaignID GetTransactionInput) ([]models.Transactions, error)
 	GetTransactionByUserID(UserID int) ([]models.Transactions, error)
+	CreateTransaction(input CreateTransactionInput) (models.Transactions, error)
 }
 
 type service struct {
 	repository Repository
 	campaignRepository campaign.Repository
+	
 }
 
 func NewService(repository Repository, 	campaignRepository campaign.Repository) *service {
@@ -59,9 +63,26 @@ func (s *service)GetTransactionByUserID(UserID int) ([]models.Transactions, erro
 	return User, nil
 
 
-
-
-
 }
+
+func(s * service)CreateTransaction(input CreateTransactionInput) (models.Transactions, error){
+
+	transaction := models.Transactions{}
+	transaction.Amount = input.Amount
+	transaction.CampaignsID= input.CampaignID
+	transaction.UsersID= int(input.User.ID)
+	transaction.Code,_ = GeneratorNumber.NewUUID()
+	transaction.Status ="pending"
+
+	SaveTransaction, err := s.repository.CreateTransaction(transaction)
+
+	if err != nil {
+
+		return SaveTransaction,err
+	}
+
+	return SaveTransaction,nil
+}
+
 
 

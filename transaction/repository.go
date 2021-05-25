@@ -10,6 +10,7 @@ import (
 type Repository interface {
 	GetTransactionByCampaignID(CampaignID int) ([]models.Transactions, error)
 	GetTransactionByUserID(UserID int) ([]models.Transactions, error)
+	CreateTransaction(transaction models.Transactions)(models.Transactions, error)
 }
 
 type repository struct {
@@ -48,3 +49,12 @@ func (r *repository) GetTransactionByUserID(UserID int) ([]models.Transactions, 
 	return transactions,nil
 }
 
+func (r *repository)CreateTransaction(transaction models.Transactions)(models.Transactions, error){
+	err := r.db.Create(&transaction).Error
+
+	if err != nil{
+		return transaction, err
+	}
+
+	return transaction, nil
+}

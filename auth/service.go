@@ -56,3 +56,6 @@ func (s *jwtService) ValidateToken(EncodeToken string) (*jwt.Token, error){
 	return token, nil
 
 }
+
+
+

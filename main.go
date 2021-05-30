@@ -6,16 +6,20 @@ import (
 	"bwastartup/config"
 	"bwastartup/handler"
 	"bwastartup/middleware"
+	"bwastartup/payment"
 	"bwastartup/transaction"
 	"bwastartup/user"
 	"fmt"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main(){
 
 	router := gin.Default()
+	router.Use(cors.Default())
+
 	config.ConnectDatabase()
 
 	userRepository := user.NewRepository(config.DB)
@@ -24,9 +28,12 @@ func main(){
 
 	CampaignRepository := campaign.NewRepository(config.DB)
 	CampaignService := campaign.NewService(CampaignRepository)
+	
 
 	TransactionRepository := transaction.NewRepository(config.DB)
-	TransactionService := transaction.NewService(TransactionRepository,CampaignRepository)
+	paymentService := payment.NewService()
+
+	TransactionService := transaction.NewService(TransactionRepository,CampaignRepository,paymentService)
 
 	// user,_ := userService.GetUserById(3)
 
@@ -122,6 +129,7 @@ func main(){
 		v1.POST("/user/login", userHandler.LoginUser)
 		v1.POST("/user/checkmail", userHandler.CheckEmailIsExist)
 		v1.POST("/user/avatar",middleware.AuthMiddleware(AuthService, userService) ,userHandler.UploadAvatar)
+		v1.GET("/user/fetch",middleware.AuthMiddleware(AuthService, userService) ,userHandler.FetchUser)
 
 
 		v1.GET("/campaigns/all",CampaignHandler.GetCampaign)
@@ -134,6 +142,7 @@ func main(){
 		v1.GET("/campaigns/:id/transactions", middleware.AuthMiddleware(AuthService, userService), TransactionHandler.GetTransaction)
 		v1.GET("/transactions/users", middleware.AuthMiddleware(AuthService, userService), TransactionHandler.GetUserTransaction)
 		v1.POST("/transactions/create", middleware.AuthMiddleware(AuthService, userService), TransactionHandler.CreateTransaction)
+		v1.POST("/transactions/notification", TransactionHandler.GetNotification)
 
 	}
 	router.Run(":8000")

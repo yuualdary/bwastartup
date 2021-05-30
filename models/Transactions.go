@@ -14,6 +14,7 @@ type Transactions struct {
 	Amount      int
 	Status      string
 	Code        string
+	PaymentURL string
 	User Users `gorm:"foreignKey:UsersID"`
 	Campaign Campaigns `gorm:"foreignKey:CampaignsID"`
 	CreatedAt time.Time

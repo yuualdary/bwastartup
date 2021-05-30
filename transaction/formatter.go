@@ -92,3 +92,28 @@ func ListFormatUserTransactions(transactions []models.Transactions) []UserTransa
 	return ListTransactionFormatter
 
 }
+
+
+
+type PaymentTransactionFormatter struct{
+	ID        int    `json:"id"`
+	CampaignID int `json:"campaign_id"`
+	UserID int `json:"user_id"`
+	Amount    int    `json:"amount"`
+	Status string `json:"status"`
+	Code string `json:"code"`
+	PaymentURL string `json:"payment_url"`
+
+}
+func FormatPaymentTransaction(transaction models.Transactions) PaymentTransactionFormatter{
+	formatter := PaymentTransactionFormatter{}
+	formatter.ID = int(transaction.ID)
+	formatter.CampaignID = transaction.CampaignsID
+	formatter.UserID = transaction.UsersID
+	formatter.Amount = transaction.Amount
+	formatter.Status = transaction.Status
+	formatter.Code = transaction.Code
+	formatter.PaymentURL = transaction.PaymentURL
+
+	 return formatter
+}

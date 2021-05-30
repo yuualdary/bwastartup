@@ -10,7 +10,9 @@ import (
 type Repository interface {
 	GetTransactionByCampaignID(CampaignID int) ([]models.Transactions, error)
 	GetTransactionByUserID(UserID int) ([]models.Transactions, error)
+	GetTransactionByID(TransactionID int) (models.Transactions, error)
 	CreateTransaction(transaction models.Transactions)(models.Transactions, error)
+	UpdateTransaction(transaction models.Transactions)(models.Transactions, error)
 }
 
 type repository struct {
@@ -57,4 +59,24 @@ func (r *repository)CreateTransaction(transaction models.Transactions)(models.Tr
 	}
 
 	return transaction, nil
+}
+
+func(r *repository) UpdateTransaction(transaction models.Transactions)(models.Transactions, error){
+
+	err:= r.db.Save(&transaction).Error
+	if err != nil{
+		return transaction, err
+	}
+	return transaction,nil
+}
+func (r *repository) GetTransactionByID(TransactionID int) (models.Transactions, error){
+
+	var transactions models.Transactions
+
+	err := r.db.Where("id = ?",TransactionID).Find(&transactions).Error
+	if err != nil{
+		return transactions,err
+	}
+
+	return transactions,nil
 }
